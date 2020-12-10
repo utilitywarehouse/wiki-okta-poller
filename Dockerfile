@@ -1,10 +1,12 @@
-FROM: golang:alpine
+FROM golang:alpine
 
 WORKDIR /wiki-okta-poller
 
 COPY . .
 
-RUN go get ./...
+RUN apk update && apk upgrade && apk add --no-cache bash git
 
-CMD ["/wiki-okta-poller/bin/graph
+RUN export GOPATH=`pwd` && go get ./...
+
+CMD ["/wiki-okta-poller/bin/wiki-poller"]
 

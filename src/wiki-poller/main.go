@@ -76,19 +76,19 @@ func mainprog(t time.Time) {
 			// check if user exists
 			usercheck, _ := wikiapi.DoesUserExist(userdetails.Profile.Email)
 			if usercheck {
-				fmt.Println("--", userdetails.Profile.Email, "from okta ALREADY EXISTS in wiki")
+				//fmt.Println("--", userdetails.Profile.Email, "from okta ALREADY EXISTS in wiki")
 				// add user to wiki group based on okta group
-				if strings.Contains(wikigroupuserjson, userdetails.Profile.Email) {
-					fmt.Println("--", userdetails.Profile.Email, "ALREADY EXISTS in wiki group -", wikigroup)
-				} else {
+				if !strings.Contains(wikigroupuserjson, userdetails.Profile.Email) {
 					if wikiapi.AddUserNameToGroupName(wikigroup, userdetails.Profile.Email) {
 						fmt.Println("added user", userdetails.Profile.Email, "to wiki group -", wikigroup)
 					} else {
 						fmt.Println("ERROR adding user", userdetails.Profile.Email, "to", wikigroup)
 					}
+					//} else {
+					//	fmt.Println("--", userdetails.Profile.Email, "ALREADY EXISTS in wiki group -", wikigroup)
 				}
 			} else {
-				fmt.Println("user from okta MISSING in wiki", userdetails.Profile.Email, usercheck)
+				//fmt.Println("user from okta MISSING in wiki", userdetails.Profile.Email, usercheck)
 				// if user is missing create user with okta link and default group
 				createuserresult, slug := wikiapi.CreateNewUser(userdetails.Profile.Email, ""+userdetails.Profile.FirstName+" "+userdetails.Profile.LastName+"", "placeholderpas$wordb3causeOKTA3213", "3")
 				if createuserresult {
@@ -109,10 +109,7 @@ func mainprog(t time.Time) {
 		json.Unmarshal([]byte(wikigroupuserjson), &wikiuserlistout)
 		// check wiki user list against okta group and remove users not in okta group
 		for _, wikiuserdetails := range wikiuserlistout.Groups.Single.Users {
-			fmt.Println("testsetsetset", wikiuserdetails.Email)
-			//fmt.Println("outoutoutoutout - okta", oktauserlist)
 			if !strings.Contains(oktauserlist, wikiuserdetails.Email) {
-				fmt.Println("user exists in wiki but not in okta", wikiuserdetails.Email)
 				// remove user from wiki if condition met
 				if wikiapi.RemoveUserNameFromGroupName(wikigroup, wikiuserdetails.Email) {
 					fmt.Println("user removed from wiki group", wikiuserdetails.Email, "-", wikigroup)
