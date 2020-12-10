@@ -11,3 +11,5 @@ export Oktaprovider="929a5910-f174-41d9-9c02-ad8b5e2c78c3"
 export Oktadomain="utilitywarehouse-admin.okta.com"
 
 export Oktatoken="SSWS \<oktatoken\>"
+
+export WikiInterval="300" # in seconds
