@@ -99,7 +99,6 @@ func GetJson(url string) string {
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Authorization", Oktatoken)
 
-	//resp, err := http.Get(url)
 	resp, err := client.Do(req)
 
 	if err != nil {
@@ -117,9 +116,9 @@ func GetJson(url string) string {
 
 }
 
+// get list of groups from okta
 func GetListOfGroups(groupstartswith string) string {
 
-	//groupstartswith := "uw_ag_wiki"
 	url := "https://" + Oktadomain + "/api/v1/groups?q=" + groupstartswith + "&limit=200"
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", url, nil)
@@ -128,7 +127,6 @@ func GetListOfGroups(groupstartswith string) string {
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Authorization", Oktatoken)
 
-	//resp, err := http.Get(url)
 	resp, err := client.Do(req)
 
 	if err != nil {
@@ -149,12 +147,7 @@ func GetListOfGroups(groupstartswith string) string {
 // get email addresses from test group
 func GetUserEmailsFromGroup(oktagroupid string) string {
 
-	testurl := "https://" + Oktadomain + "/api/v1/groups/" + oktagroupid + "/users?limit=200"
-	getbody := GetJson(testurl)
-	//fmt.Println("output equals = ", getbody)
-
-	// for numnum, groupItem := range oktaoutput {
-	// 	fmt.Println("output", numnum, "is", groupItem.Profile.Email)
-	// }
+	userurl := "https://" + Oktadomain + "/api/v1/groups/" + oktagroupid + "/users?limit=200"
+	getbody := GetJson(userurl)
 	return getbody
 }

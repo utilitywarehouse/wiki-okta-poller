@@ -11,8 +11,6 @@ import (
 	"wiki-poller/wikiapi"
 )
 
-//var WikiInterval string = os.Getenv("WikiInterval")
-
 func doEvery(d time.Duration, f func(time.Time)) {
 	for x := range time.Tick(d) {
 		f(x)
@@ -90,11 +88,8 @@ func mainprog(t time.Time) {
 					} else {
 						fmt.Println("ERROR adding user", useremail, "to", wikigroup)
 					}
-					//} else {
-					//	fmt.Println("--", useremail, "ALREADY EXISTS in wiki group -", wikigroup)
 				}
 			} else {
-				//fmt.Println("user from okta MISSING in wiki", useremail, usercheck)
 				// if user is missing create user with okta link and default group
 				createuserresult, slug := wikiapi.CreateNewUser(useremail, ""+userdetails.Profile.FirstName+" "+userdetails.Profile.LastName+"", "placeholderpas$wordb3causeOKTA3213", "3")
 				if createuserresult {
