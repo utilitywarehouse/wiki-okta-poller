@@ -20,7 +20,6 @@ func doEvery(d time.Duration, f func(time.Time)) {
 func main() {
 
 	// 0. check vars from env
-
 	if len(oktaapi.Oktadomain) < 1 {
 		fmt.Println("env variable oktadomain not set")
 		os.Exit(1)
