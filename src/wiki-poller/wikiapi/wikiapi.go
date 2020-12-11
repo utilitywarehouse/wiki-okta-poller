@@ -150,7 +150,7 @@ func CreateNewUser(useremail string, username string, userpasswd string, usergro
     ){
        responseResult{succeeded,errorCode,slug,message}
       }
-       }
+    }
   }
 `)
 	graphqlRequest.Header.Set("Authorization", WikiToken)
