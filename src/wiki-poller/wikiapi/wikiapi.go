@@ -90,6 +90,19 @@ type GetUsersFromGroup struct {
 	} `json:"groups"`
 }
 
+type UpdateUserTimezoneType struct {
+	Users struct {
+		Update struct {
+			ResponseResult struct {
+				Succeeded bool   `json:"succeeded"`
+				ErrorCode int    `json:"errorCode"`
+				Slug      string `json:"slug"`
+				Message   string `json:"message"`
+			} `json:"responseResult"`
+		} `json:"update"`
+	} `json:"users"`
+}
+
 // add useremail to groupname
 func AddUserNameToGroupName(groupname string, useremail string) bool {
 
@@ -163,6 +176,36 @@ func CreateNewUser(useremail string, username string, userpasswd string, usergro
 		return graphqlResponse.Users.Create.ResponseResult.Succeeded, ""
 	} else {
 		return graphqlResponse.Users.Create.ResponseResult.Succeeded, graphqlResponse.Users.Create.ResponseResult.Slug
+	}
+}
+
+// update user timezone
+func UpdateUserTimezone(useremail string) (bool, string) {
+
+	_, userid := DoesUserExist(useremail)
+	useridstr := strconv.Itoa(userid)
+
+	graphqlClient := graphql.NewClient(WikiUrl)
+	graphqlRequest := graphql.NewRequest(`
+	mutation{users{update(
+		id: ` + useridstr + `
+		timezone: "Europe/London"
+		){
+		   responseResult{succeeded,errorCode,slug,message}
+		  }
+		}
+	  }
+`)
+	graphqlRequest.Header.Set("Authorization", WikiToken)
+	var graphqlResponse UpdateUserTimezoneType
+	if err := graphqlClient.Run(context.Background(), graphqlRequest, &graphqlResponse); err != nil {
+		fmt.Println("ERROR:", err)
+	}
+
+	if graphqlResponse.Users.Update.ResponseResult.Succeeded {
+		return graphqlResponse.Users.Update.ResponseResult.Succeeded, ""
+	} else {
+		return graphqlResponse.Users.Update.ResponseResult.Succeeded, graphqlResponse.Users.Update.ResponseResult.Slug
 	}
 }
 

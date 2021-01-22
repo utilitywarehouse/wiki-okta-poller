@@ -109,6 +109,14 @@ func mainprog(t time.Time) {
 		json.Unmarshal([]byte(wikigroupuserjson), &wikiuserlistout)
 		// check wiki user list against okta group and remove users not in okta group
 		for _, wikiuserdetails := range wikiuserlistout.Groups.Single.Users {
+			// set all user timezones to Europe/London
+			updateusertimezonebool, updateusertimezoneslug := wikiapi.UpdateUserTimezone(strings.ToLower(wikiuserdetails.Email))
+			if !updateusertimezonebool {
+				fmt.Println("user timezone not updated", wikiuserdetails.Email, updateusertimezoneslug)
+			} else {
+				fmt.Println("user timezone updated", wikiuserdetails.Email)
+			}
+			// continue
 			if !strings.Contains(strings.ToLower(oktauserlist), strings.ToLower(wikiuserdetails.Email)) {
 				// remove user from wiki if condition met
 				if wikiapi.RemoveUserNameFromGroupName(wikigroup, wikiuserdetails.Email) {
