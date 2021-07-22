@@ -119,7 +119,7 @@ func GetJson(url string) string {
 // get list of groups from okta
 func GetListOfGroups(groupstartswith string) string {
 
-	url := "https://" + Oktadomain + "/api/v1/groups?q=" + groupstartswith + "&limit=200"
+	url := "https://" + Oktadomain + "/api/v1/groups?q=" + groupstartswith + "&limit=1000"
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", url, nil)
 
@@ -147,7 +147,7 @@ func GetListOfGroups(groupstartswith string) string {
 // get email addresses from test group
 func GetUserEmailsFromGroup(oktagroupid string) string {
 
-	userurl := "https://" + Oktadomain + "/api/v1/groups/" + oktagroupid + "/users?limit=200"
+	userurl := "https://" + Oktadomain + "/api/v1/groups/" + oktagroupid + "/users?limit=1000"
 	getbody := GetJson(userurl)
 	return getbody
 }
